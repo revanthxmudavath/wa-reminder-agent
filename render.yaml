@@ -2,9 +2,11 @@ services:
   - type: worker
     name: wa-reminder-agent
     env: node
-    buildCommand: apt-get install -y chromium-browser --no-install-recommends && npm install
+    buildCommand: npm install && npx puppeteer browsers install chrome
     startCommand: node --max-old-space-size=256 src/index.js
     plan: free
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PUPPETEER_CACHE_DIR
+        value: /opt/render/project/src/.cache/puppeteer

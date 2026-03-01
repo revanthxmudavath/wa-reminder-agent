@@ -1,13 +1,24 @@
+# nixpacks.toml
+
 [phases.setup]
 aptPkgs = [
-"chromium",
-"ca-certificates",
-"fonts-liberation",
-"libnss3",
-"libxss1",
-"libasound2",
-"libatk-bridge2.0-0",
-"libatk1.0-0",
-"libgbm1",
-"libgtk-3-0"
+  "chromium",
+  "ca-certificates",
+  "fonts-liberation",
+  "libasound2",
+  "libatk-bridge2.0-0",
+  "libatk1.0-0",
+  "libcups2",
+  "libdrm2",
+  "libgbm1",
+  "libgtk-3-0",
+  "libnss3",
+  "libx11-xcb1",
+  "libxcomposite1",
+  "libxdamage1",
+  "libxrandr2",
+  "libxshmfence1",
+  "libpangocairo-1.0-0",
+  "libpango-1.0-0",
+  "libu2f-udev"
 ]

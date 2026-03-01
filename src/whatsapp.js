@@ -5,16 +5,41 @@ let client = null;
 let isReady = false;
 let latestQr = null;
 
+const fs = require("fs");
+
+function resolveChromePath() {
+  const candidates = [
+    process.env.PUPPETEER_EXECUTABLE_PATH,
+    "/usr/bin/chromium",
+    "/usr/bin/chromium-browser",
+    "/usr/bin/google-chrome",
+    "/usr/bin/google-chrome-stable",
+  ].filter(Boolean);
+
+  for (const p of candidates) {
+    if (fs.existsSync(p)) return p;
+  }
+  return null;
+}
+
+
 function getClient() {
   if (client) return client;
+
+  const chromePath = resolveChromePath();
+  console.log("[puppeteer] chromePath =", chromePath);
+
+  if (!chromePath) {
+  throw new Error(
+    "No Chrome/Chromium found. Install chromium in the Railway image (nixpacks.toml) or set PUPPETEER_EXECUTABLE_PATH to a valid binary."
+  );
+}
 
   client = new Client({
     authStrategy: new LocalAuth({ dataPath: process.env.WWEBJS_AUTH_PATH || '/data/.wwebjs_auth' }),
     puppeteer: {
       headless: true,
-      ...(process.env.PUPPETEER_EXECUTABLE_PATH && {
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
-      }),
+      ...(chromePath ? { executablePath: chromePath } : {}),
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',

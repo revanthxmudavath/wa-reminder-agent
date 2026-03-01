@@ -9,7 +9,7 @@ function getClient() {
   if (client) return client;
 
   client = new Client({
-    authStrategy: new LocalAuth({ dataPath: '.wwebjs_auth' }),
+    authStrategy: new LocalAuth({ dataPath: process.env.WWEBJS_AUTH_PATH || '/data/.wwebjs_auth' }),
     puppeteer: {
       headless: true,
       ...(process.env.PUPPETEER_EXECUTABLE_PATH && {

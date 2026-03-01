@@ -1,7 +1,5 @@
 // On Render, point Chrome cache inside the project folder so it persists from build to runtime
-if (process.env.RENDER) {
-  process.env.PUPPETEER_CACHE_DIR = process.env.PUPPETEER_CACHE_DIR || '/opt/render/project/src/.cache/puppeteer';
-}
+process.env.PUPPETEER_CACHE_DIR = process.env.PUPPETEER_CACHE_DIR || '/tmp/puppeteer';
 
 const express = require('express');
 const { runFlow } = require('./flow');

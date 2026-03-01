@@ -2,7 +2,7 @@ services:
   - type: worker
     name: wa-reminder-agent
     env: node
-    buildCommand: npm install && npx puppeteer browsers install chrome
+    buildCommand: npm install && PUPPETEER_CACHE_DIR=/opt/render/project/src/.cache/puppeteer npx puppeteer browsers install chrome
     startCommand: node --max-old-space-size=256 src/index.js
     plan: free
     envVars:

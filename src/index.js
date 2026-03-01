@@ -5,7 +5,8 @@ if (process.env.RENDER) {
 
 const express = require('express');
 const { runFlow } = require('./flow');
-const { getClient } = require('./whatsapp');
+const { getClient, getLatestQr } = require('./whatsapp');
+const QRCode = require('qrcode');
 require('dotenv').config();
 
 const app = express();
@@ -17,6 +18,18 @@ getClient();
 // Health check
 app.get('/', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
+});
+
+// QR code endpoint — open in browser to scan WhatsApp
+app.get('/qr', async (req, res) => {
+  const qr = getLatestQr();
+  if (!qr) {
+    return res.send('<h2>WhatsApp is already connected ✓</h2>');
+  }
+  const imgUrl = await QRCode.toDataURL(qr);
+  res.send(`<html><body style="display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background:#111">
+    <img src="${imgUrl}" style="width:300px;height:300px"/>
+  </body></html>`);
 });
 
 // Trigger endpoint (called by GitHub Actions)

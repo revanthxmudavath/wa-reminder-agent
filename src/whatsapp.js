@@ -3,6 +3,7 @@ const qrcode = require('qrcode-terminal');
 
 let client = null;
 let isReady = false;
+let latestQr = null;
 
 function getClient() {
   if (client) return client;
@@ -28,11 +29,13 @@ function getClient() {
   });
 
   client.on('qr', (qr) => {
-    console.log('[whatsapp] Scan this QR code with your WhatsApp:');
+    latestQr = qr;
+    console.log('[whatsapp] QR ready — open /qr in browser to scan.');
     qrcode.generate(qr, { small: true });
   });
 
   client.on('ready', () => {
+    latestQr = null;
     console.log('[whatsapp] Client is ready.');
     isReady = true;
   });
@@ -50,4 +53,8 @@ function isClientReady() {
   return isReady;
 }
 
-module.exports = { getClient, isClientReady };
+function getLatestQr() {
+  return latestQr;
+}
+
+module.exports = { getClient, isClientReady, getLatestQr };

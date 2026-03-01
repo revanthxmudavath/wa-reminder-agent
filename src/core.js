@@ -8,4 +8,13 @@ function buildMessage(template, friendName) {
   return template.replace('[name]', friendName);
 }
 
-module.exports = { isBeforeEndDate, buildMessage };
+function isPdfFromFriend(message, friendPhone) {
+  const normalizedPhone = friendPhone.replace('+', '') + '@c.us';
+  return (
+    message.from === normalizedPhone &&
+    message.hasMedia === true &&
+    message._data?.mimetype === 'application/pdf'
+  );
+}
+
+module.exports = { isBeforeEndDate, buildMessage, isPdfFromFriend };

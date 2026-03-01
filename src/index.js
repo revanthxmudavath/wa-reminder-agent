@@ -1,3 +1,6 @@
+// Ensure Chrome cache dir points inside project folder (required on Render)
+process.env.PUPPETEER_CACHE_DIR = process.env.PUPPETEER_CACHE_DIR || '/opt/render/project/src/.cache/puppeteer';
+
 const express = require('express');
 const { runFlow } = require('./flow');
 const { getClient } = require('./whatsapp');

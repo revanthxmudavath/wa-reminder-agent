@@ -3,7 +3,7 @@ name: Reminder Trigger
 on:
   schedule:
     # TEST: Saturday Feb 28 10:30pm PST = 06:30 UTC Sunday Mar 1
-    # Change to '30 4 * * 6' for every Friday 8:30pm PST (UTC+8)
+    # PRODUCTION: Change to '0 4 * * 6' for every Friday 8pm PST (PST = UTC-8)
     - cron: '30 6 1 3 *'
   workflow_dispatch:  # allows manual trigger from GitHub UI
 

@@ -1,0 +1,19 @@
+name: Reminder Trigger
+
+on:
+  schedule:
+    # TEST: Saturday Feb 28 10:30pm PST = 06:30 UTC Sunday Mar 1
+    # Change to '30 4 * * 6' for every Friday 8:30pm PST (UTC+8)
+    - cron: '30 6 1 3 *'
+  workflow_dispatch:  # allows manual trigger from GitHub UI
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render App
+        run: |
+          curl -s -X POST "${{ secrets.RENDER_APP_URL }}/trigger" \
+            -H "Authorization: Bearer ${{ secrets.TRIGGER_SECRET }}" \
+            -H "Content-Type: application/json" \
+            --fail

@@ -10,7 +10,7 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Render App
+      - name: Trigger Railway App
         run: |
           curl -s -X POST "${{ secrets.RENDER_APP_URL }}/trigger" \
             -H "Authorization: Bearer ${{ secrets.TRIGGER_SECRET }}" \

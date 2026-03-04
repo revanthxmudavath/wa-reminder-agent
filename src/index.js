@@ -6,6 +6,8 @@ const { getClient, getLatestQr } = require('./whatsapp');
 const QRCode = require('qrcode');
 require('dotenv').config();
 
+console.log('[startup] TRIGGER_SECRET configured =', Boolean(process.env.TRIGGER_SECRET));
+
 const app = express();
 app.use(express.json());
 

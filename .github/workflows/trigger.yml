@@ -9,10 +9,24 @@ on:
 jobs:
   trigger:
     runs-on: ubuntu-latest
+    env:
+      APP_URL: ${{ secrets.RAILWAY_APP_URL }}
+      TRIGGER_SECRET: ${{ secrets.TRIGGER_SECRET }}
     steps:
-      - name: Trigger Railway App
+      - name: Validate trigger config
         run: |
-          curl -s -X POST "${{ secrets.RENDER_APP_URL }}/trigger" \
-            -H "Authorization: Bearer ${{ secrets.TRIGGER_SECRET }}" \
-            -H "Content-Type: application/json" \
-            --fail
+          test -n "$APP_URL"
+          test -n "$TRIGGER_SECRET"
+
+      - name: Trigger Railway app
+        run: |
+          response_file="$(mktemp)"
+          http_code=$(curl -sS -o "$response_file" -w "%{http_code}" -X POST "${APP_URL}/trigger" \
+            -H "Authorization: Bearer ${TRIGGER_SECRET}" \
+            -H "Content-Type: application/json")
+
+          echo "HTTP ${http_code}"
+          cat "$response_file"
+
+          test "$http_code" -ge 200
+          test "$http_code" -lt 300

@@ -9,6 +9,11 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 
+app.use((req, res, next) => {
+  console.log(`[http] ${req.method} ${req.path}`);
+  next();
+});
+
 // Initialize WhatsApp client on startup
 getClient();
 
@@ -31,10 +36,20 @@ app.get('/qr', async (req, res) => {
 
 // Trigger endpoint (called by GitHub Actions)
 app.post('/trigger', async (req, res) => {
+  console.log('[trigger] Incoming trigger request.');
+
+  if (!process.env.TRIGGER_SECRET) {
+    console.error('[trigger] TRIGGER_SECRET is not configured on the server.');
+    return res.status(500).json({ error: 'Server misconfigured' });
+  }
+
   const authHeader = req.headers['authorization'];
   if (authHeader !== `Bearer ${process.env.TRIGGER_SECRET}`) {
+    console.warn('[trigger] Unauthorized trigger attempt.');
     return res.status(401).json({ error: 'Unauthorized' });
   }
+
+  console.log('[trigger] Authorized. Flow scheduled.');
 
   // Respond immediately so GitHub Actions doesn't timeout
   res.json({ status: 'triggered', time: new Date().toISOString() });
